@@ -1,12 +1,12 @@
 devel-6.x
 =========
 
-Drupal6 CMS - Devel Module w/ mods
+Drupal 6 CMS - Devel Module w/ Mods
 
 ###
 
 
-Visit projet's owner site for more details (see below) and read owner's Licence file LICENCE.txt for more info about the Licence
+Visit project owner's site for more details (see below) and read owner's Licence file: LICENCE.txt, for more info about the Licence
 https://drupal.org/project/devel
 
 
