@@ -5,5 +5,9 @@ Drupal6 CMS - Devel Module w/ mods
 
 ###
 
-Get more info on its projets address
+
+Visit projet's owner site for more details (see below) and read owner's Licence file LICENCE.txt for more info about Licence
 https://drupal.org/project/devel
+
+
+
