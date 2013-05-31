@@ -10,4 +10,10 @@ Visit project owner's site for more details (see below) and read owner's Licence
 https://drupal.org/project/devel
 
 
+Added features:
+ # Dummy contentent using dictionary words  
 
+Licence
+=========
+
+Owner's Licence. View README.txt
