@@ -4,6 +4,8 @@ if (!ini_get('safe_mode')) {
   set_time_limit(240);
 }
 
+include_once("DICTIONARY.inc");
+
 /**
  * Generate some random users.
  *
@@ -22,9 +24,10 @@ function devel_create_users($num, $kill, $age = 0) {
   }
   if ($num > 0) {
     $names = array();
+    $array = generate_dictionary();
     while (count($names) < $num) {
       $length = mt_rand(6, 12);
-      $name = devel_generate_word($length);
+      $name = devel_generate_word($length, $array);
       $names[$name] = '';
     }
     foreach ($names as $name => $value) {
@@ -106,9 +109,10 @@ function devel_generate_vocabs($records, $maxlength = 12, $types = array('story'
   $vocs = array();
 
   // Insert new data:
+  $array = generate_dictionary();
   for ($i = 1; $i <= $records; $i++) {
     $voc = array();
-    $voc['name'] = devel_generate_word(rand(2, $maxlength));
+    $voc['name'] = devel_generate_word(rand(2, $maxlength), $array);
     $voc['description'] = "description of ". $voc['name'];
     $voc['nodes'] = array_flip(array($types[array_rand($types)]));
     foreach ($voc['nodes'] as $key => $value) {
@@ -129,6 +133,8 @@ function devel_generate_vocabs($records, $maxlength = 12, $types = array('story'
 function devel_generate_terms($records, $vocs, $maxlength = 12) {
   $terms = array();
 
+  $array = generate_dictionary();
+
   // Insert new data:
   for ($i = 1; $i <= $records; $i++) {
     switch ($i % 2) {
@@ -145,7 +151,7 @@ function devel_generate_terms($records, $vocs, $maxlength = 12) {
         break;
     }
 
-    $term['name'] = devel_generate_word(mt_rand(2, $maxlength));
+    $term['name'] = devel_generate_word(mt_rand(2, $maxlength), $array);
     $term['description'] = "description of ". $term['name'];
     $term['weight'] = mt_rand(0,10);
 
@@ -205,7 +211,16 @@ function devel_generate_taxonomy_data($num_vocab, $num_terms, $title_length, $ki
   }
 }
 
-function devel_generate_word($length){
+function devel_generate_word($length, &$array){
+ 
+  $word = $array[array_rand($array)];
+   
+  // watchdog("inc_generate_word","word: ".$word );
+  return $word;
+  
+
+
+  /*
   srand((double)microtime()*1000000);
 
   $vowels = array("a", "e", "i", "o", "u");
@@ -220,7 +235,10 @@ function devel_generate_word($length){
     $word .= $cons[mt_rand(0, $num_cons - 1)] . $vowels[mt_rand(0, $num_vowels - 1)];
   }
 
-  return substr($word, 0, $length);
+  */
+  // return substr($word, 0, $length);
+  
+  
 }
 
 function devel_create_content($type = NULL) {
@@ -299,8 +317,15 @@ function devel_create_para($words, $type = 0) {
   return $output;
 }
 
-function devel_create_greeking($words, $title = FALSE) {
-  $dictionary = array("abbas", "abdo", "abico", "abigo", "abluo", "accumsan",
+function devel_create_greeking($wordlist, $title = FALSE) {
+
+
+  $DICT = generate_dictionary(); 
+
+  // watchdog("wd","<pre>".print_r($d, true)."</pre>");
+
+/*
+  $DICT = array("abbas", "abdo", "abico", "abigo", "abluo", "accumsan",
     "acsi", "ad", "adipiscing", "aliquam", "aliquip", "amet", "antehabeo",
     "appellatio", "aptent", "at", "augue", "autem", "bene", "blandit",
     "brevitas", "caecus", "camur", "capto", "causa", "cogo", "comis",
@@ -330,31 +355,34 @@ function devel_create_greeking($words, $title = FALSE) {
     "veniam", "venio", "vereor", "vero", "verto", "vicis", "vindico",
     "virtus", "voco", "volutpat", "vulpes", "vulputate", "wisi", "ymo",
     "zelus");
+*/
+
 
   $greeking = "";
 
   if (!$title) {
-	  while ($words > 0) {
+	  while ($wordlist > 0) {
 	    $sentence_length = mt_rand(3,10);
 
-	    $greeking .= ucfirst($dictionary[array_rand($dictionary)]);
+	    $greeking .= ucfirst($DICT[array_rand($DICT)]);
 	    for ($i = 1; $i < $sentence_length; $i++) {
-	      $greeking .= " " . $dictionary[array_rand($dictionary)];
+	      $greeking .= " " . $DICT[array_rand($DICT)];
 	    }
 
 	    $greeking .= ". ";
-	    $words -= $sentence_length;
+	    $wordlist -= $sentence_length;
 	  }
   }
   else {
   	// use different method for titles
-  	$title_length = $words;
+  	$title_length = $wordlist;
   	$array = array();
-  	for ($i = 0; $i < $words; $i++) {
-  		$array[] = $dictionary[array_rand($dictionary)];
+  	for ($i = 0; $i < $wordlist; $i++) {
+  		$array[] = $DICT[array_rand($DICT)];
   	}
   	$greeking = ucwords(implode(' ', $array));
   }
+  
   return $greeking;
 }
 

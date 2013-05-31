@@ -1,5 +1,6 @@
 <?php
 
+// include_once("WORDLIST.inc");
 /**
  * Devel Generate batch handling functions using the BatchAPI
  * included by devel_generate.module
